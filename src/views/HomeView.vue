@@ -12,11 +12,29 @@ const currentEmail = ref("");
 const currentPassword = ref("");
 const router = useRouter();
 
-const createNewUserchangeView = () => {
-  router.push({ name: "mainview" }); // Correct the name to "mainView"
+const changeView = () => {
+  router.push({ path: "/mainview" });
 };
-const signInchangeView = () => {
-  router.push({ name: "mainview" }); // Correct the name to "mainView"
+
+const handleSignIn = async () => {
+  const result = await userStore.signIn(
+    currentEmail.value,
+    currentPassword.value
+  );
+  if (userStore.authenticationStatus === true) {
+    changeView();
+    console.log(userStore.authenticationStatus);
+  }
+};
+const handleCreateUser = async () => {
+  const result = await userStore.createNewUser(
+    newEmail.value,
+    newPassword.value
+  );
+  if (userStore.authenticationStatus === true) {
+    changeView();
+    console.log(userStore.authenticationStatus);
+  }
 };
 </script>
 
@@ -25,25 +43,11 @@ const signInchangeView = () => {
   <input placeholder="Write your email" v-model="newEmail" />
   <input placeholder="Write your password" v-model="newPassword" />
 
-  <button
-    @click="
-      userStore.createNewUser(newEmail, newPassword);
-      createNewUserchangeView();
-    "
-  >
-    Create New user
-  </button>
+  <button @click="handleCreateUser">Create New user</button>
   <div>
     <input placeholder="Write your email" v-model="currentEmail" />
     <input placeholder="Write your password" v-model="currentPassword" />
 
-    <button
-      @click="
-        userStore.signIn(currentEmail, currentPassword);
-        signInchangeView();
-      "
-    >
-      Sign In
-    </button>
+    <button @click="handleSignIn">Sign In</button>
   </div>
 </template>

@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
 import supabase from "../lib/supabase";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
 
-
+const authenticationStatus = ref(false);
 
 export const useUserStore = defineStore("userStore", () => {
   const user = ref();
@@ -19,6 +18,7 @@ export const useUserStore = defineStore("userStore", () => {
     } else {
       console.log("Data", data);
       user.value = data;
+      authenticationStatus.value = true;
     }
   };
 
@@ -30,12 +30,16 @@ export const useUserStore = defineStore("userStore", () => {
     });
     if (error) {
       console.log("Error", error);
+
     } else {
       console.log("Data", data);
       user.value = data;
+      authenticationStatus.value = true;
     }
   }
 
 
-  return { user, createNewUser, signIn };
+
+
+  return { user, createNewUser, signIn, authenticationStatus };
 });
