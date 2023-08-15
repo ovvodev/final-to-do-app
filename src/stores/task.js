@@ -40,6 +40,22 @@ export const useTaskStore = defineStore("taskStore", () => {
         }
     }
 
+    const updateTask = async (taskId, taskName) => {
 
-    return { tasks, fetchTasks, createTask, deleteTask };
+        const { error } = await supabase
+            .from('tasks')
+            .update({ title: taskName })
+            .eq('id', taskId)
+        if (error) {
+            console.error("Error deleting task:", error);
+        } else {
+            const taskToUpdate = tasks.value.find(task => task.id === taskId);
+            if (taskToUpdate) {
+                taskToUpdate.title = taskName;
+            }
+        }
+    }
+
+
+    return { tasks, fetchTasks, createTask, deleteTask, updateTask };
 })

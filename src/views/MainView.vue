@@ -7,8 +7,8 @@ const taskStore = useTaskStore();
 const userStore = useUserStore();
 const userId = userStore.user.user.id;
 const name = ref("");
-const createNewTask = () => {
-  taskStore.createTask(userId, name.value);
+const createNewTask = async () => {
+  await taskStore.createTask(userId, name.value);
   name.value = ""; // Clear the input field after submitting
 };
 onMounted(() => {
@@ -19,8 +19,15 @@ watch(name, (newTask) => {
   taskStore.fetchTasks(newTask);
 });
 const taskId = taskStore.tasks.id;
-const deleteCurrenttask = (taskId) => {
-  taskStore.deleteTask(taskId);
+const deleteCurrentTask = async (taskId) => {
+  await taskStore.deleteTask(taskId);
+};
+
+const updateCurrentTask = async (taskId, currentName) => {
+  const newName = window.prompt("Edit the task", currentName);
+  if (newName) {
+    await taskStore.updateTask(taskId, newName);
+  }
 };
 </script>
 <template>
@@ -31,7 +38,8 @@ const deleteCurrenttask = (taskId) => {
   <ul>
     <li v-for="task in taskStore.tasks" :key="task.id">
       {{ task.title }}{{ task.is_complete }}
-      <span><button @click="deleteCurrenttask(task.id)">delete</button></span>
+      <span><button @click="deleteCurrentTask(task.id)">delete</button></span>
+      <button @click="updateCurrentTask(task.id, task.title)">edit</button>
     </li>
   </ul>
 
