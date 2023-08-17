@@ -6,4 +6,8 @@ import { RouterView } from "vue-router";
   <RouterView> </RouterView>
 </template>
 
-<style></style>
+<style>
+body {
+  font-family: var(--font-family);
+}
+</style>
