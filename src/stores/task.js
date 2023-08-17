@@ -55,7 +55,22 @@ export const useTaskStore = defineStore("taskStore", () => {
             }
         }
     }
+    const updateComplitionStatus = async (taskId, isCompleted) => {
+        const { error } = await supabase
+            .from('tasks')
+            .update({ is_complete: isCompleted })
+            .eq('id', taskId);
+
+        if (error) {
+            console.error("Error updating task:", error);
+        } else {
+            const taskToUpdate = tasks.value.find(task => task.id === taskId);
+            if (taskToUpdate) {
+                taskToUpdate.is_complete = isCompleted;
+            }
+        }
+    };
 
 
-    return { tasks, fetchTasks, createTask, deleteTask, updateTask };
+    return { tasks, fetchTasks, createTask, deleteTask, updateTask, updateComplitionStatus };
 })

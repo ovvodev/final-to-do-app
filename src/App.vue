@@ -3,7 +3,7 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <RouterView> </RouterView>
+  <RouterView class="surface-200"> </RouterView>
 </template>
 
 <style>

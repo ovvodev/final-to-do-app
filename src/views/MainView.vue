@@ -6,6 +6,10 @@ import TasksView from "../views/TasksView.vue";
 import ScrollPanel from "primevue/scrollpanel";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
+import NavBar from "../views/NavBar.vue";
+import { useToast } from "primevue/usetoast";
+
+import Toast from "primevue/toast";
 
 import Card from "primevue/card";
 import Button from "primevue/button";
@@ -36,8 +40,18 @@ const createNewTask = async () => {
 watch(name, (newTask) => {
   taskStore.fetchTasks(newTask);
 });
+const toast = useToast();
+const showSuccess = () => {
+  toast.add({
+    severity: "success",
+    summary: "Saved",
+    detail: "Your task has been created",
+    life: 3000,
+  });
+};
 </script>
 <template>
+  <NavBar></NavBar>
   <div class="grid m-auto">
     <div class="card col-3 align-items-left justify-content-left">
       <Card style="height: 30rem">
@@ -55,6 +69,7 @@ watch(name, (newTask) => {
           >
         </template>
         <template #footer>
+          <Toast />
           <div class="card flex justify-content-center add-button">
             <Dialog
               v-model:visible="visible"
@@ -81,6 +96,7 @@ watch(name, (newTask) => {
                   @click="
                     visible = false;
                     createNewTask();
+                    showSuccess();
                   "
                   autofocus
                 />
