@@ -3,7 +3,7 @@ import { useUserStore } from "@/stores/user";
 import { ref, onMounted, watch } from "vue";
 import { useTaskStore } from "@/stores/task";
 import TasksView from "../views/TasksView.vue";
-import ScrollPanel from "primevue/scrollpanel";
+
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import NavBar from "../views/NavBar.vue";
@@ -11,7 +11,6 @@ import { useToast } from "primevue/usetoast";
 
 import Toast from "primevue/toast";
 
-import Card from "primevue/card";
 import Button from "primevue/button";
 
 const taskStore = useTaskStore();
@@ -33,10 +32,7 @@ const createNewTask = async () => {
   await taskStore.createTask(userId, name.value);
   name.value = ""; // Clear the input field after submitting
 };
-/*onMounted(() => {
-  taskStore.fetchTasks();
-});
-*/
+
 watch(name, (newTask) => {
   taskStore.fetchTasks(newTask);
 });
@@ -51,107 +47,85 @@ const showSuccess = () => {
 };
 </script>
 <template>
-  <NavBar></NavBar>
-  <div class="grid m-auto">
-    <div class="card col-3 align-items-left justify-content-left">
-      <Card style="height: 30rem">
-        <template #header>
-          <h3>ToDoy</h3>
-        </template>
-        <template #content>
-          <p>{{ userStore.user.user.email }}</p>
-          <span
-            class="pi pi-check cursor-pointer"
-            @click="taskStore.fetchTasks()"
-          ></span
-          ><span class="cursor-pointer" @click="taskStore.fetchTasks()">
-            My Tasks</span
+  <div class="dark:bg-zinc-900 dark:text-slate-200">
+    <NavBar></NavBar>
+    <Toast />
+    <div
+      class="card flex justify-content-center add-button dark:text-slate-200 dark:bg-zinc-900"
+    >
+      <Dialog
+        class="dark:bg-zync-900"
+        v-model:visible="visible"
+        :modal="true"
+        :draggable="false"
+        :position="position"
+        header="Add new task"
+        :style="{ width: '50vw' }"
+      >
+        <InputText
+          type="text"
+          v-model="name"
+          :style="{ width: '90%' }"
+          class="dark:bg-zync-900"
+        />
+
+        <button
+          class="dark:text-slate-200"
+          label="cancel"
+          icon="pi pi-times"
+          @click="
+            visible = false;
+            cancel();
+          "
+          text
+        >
+          Cancel
+        </button>
+        <button
+          class="dark:text-slate-200"
+          label="Save"
+          icon="pi pi-check"
+          @click="
+            visible = false;
+            createNewTask();
+            showSuccess();
+          "
+          autofocus
+        >
+          Save
+        </button>
+      </Dialog>
+      <div
+        class="flex flex-col space-y-4 p-4 dark:text-slate-200 dark:bg-zinc-900"
+      >
+        <button
+          class="font-mono"
+          v-tooltip.top="'Add new task'"
+          @click="
+            visible = true;
+            openPosition('top');
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-9 h-9"
           >
-        </template>
-        <template #footer>
-          <Toast />
-          <div class="card flex justify-content-center add-button">
-            <Dialog
-              v-model:visible="visible"
-              :modal="true"
-              :draggable="false"
-              :position="position"
-              header="Add new task"
-              :style="{ width: '50vw' }"
-            >
-              <InputText type="text" v-model="name" :style="{ width: '90%' }" />
-              <template #footer>
-                <Button
-                  label="cancel"
-                  icon="pi pi-times"
-                  @click="
-                    visible = false;
-                    cancel();
-                  "
-                  text
-                />
-                <Button
-                  label="Save"
-                  icon="pi pi-check"
-                  @click="
-                    visible = false;
-                    createNewTask();
-                    showSuccess();
-                  "
-                  autofocus
-                />
-              </template>
-            </Dialog>
-          </div>
-        </template>
-      </Card>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
-    <div class="card col-9 align-items-center justify-content-center">
-      <Card style="height: 30rem">
-        <template #header>
-          <h3>Tasks</h3>
-        </template>
-        <template #content>
-          <ScrollPanel style="width: 100%; height: 20rem">
-            <TasksView></TasksView>
-          </ScrollPanel>
-          <Button
-            class="add-button"
-            icon="pi pi-plus"
-            v-tooltip.top="'Add new task'"
-            @click="
-              visible = true;
-              openPosition('top');
-            "
-          />
-        </template>
-      </Card>
-    </div>
+    <TasksView
+      class="w-8/12 justify-center content-center items-center m-auto text-center dark:bg-zinc-900 dark:text-slate-200"
+    ></TasksView>
   </div>
-
-  <!--<input type="text" v-model="name" /><button @click="createNewTask">
-    submit
-  </button>
-  <p>{{ name }}</p>-->
 </template>
-<style>
-.card {
-  padding: 20px;
-}
-.p-card {
-  padding: 20px;
-}
-.grid {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 3rem;
-}
-
-.add-button {
-  position: relative;
-  top: -1rem;
-  left: -1rem;
-  z-index: 2;
-}
-</style>
+<style></style>

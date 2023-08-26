@@ -38,8 +38,13 @@ export const useUserStore = defineStore("userStore", () => {
     }
   }
 
+  const resetAuthenticationStatus = () => {
+    authenticationStatus.value = false;
+  };
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    authenticationStatus.value = false;
+  }
 
-
-
-  return { user, createNewUser, signIn, authenticationStatus };
+  return { user, createNewUser, signIn, authenticationStatus, signOut, resetAuthenticationStatus };
 });

@@ -1,23 +1,24 @@
 <script setup>
-import { useUserStore } from "@/stores/user";
 import { ref, onMounted, watch } from "vue";
 import { useTaskStore } from "@/stores/task";
-import Panel from "primevue/panel";
+
 import Checkbox from "primevue/checkbox";
 import supabase from "@/lib/supabase";
-import Card from "primevue/card";
-import Divider from "primevue/divider";
+
 import { useToast } from "primevue/usetoast";
-import Button from "primevue/button";
+
 import Toast from "primevue/toast";
+
 const taskStore = useTaskStore();
 
-/*onMounted(() => {
-  taskStore.fetchTasks();
+onMounted(async () => {
+  // Fetch tasks from Supabase
+  await taskStore.fetchTasks();
 });
-*/
+
 const toast = useToast();
 const taskId = taskStore.tasks.id;
+
 const deleteCurrentTask = async (taskId) => {
   await taskStore.deleteTask(taskId);
 };
@@ -61,75 +62,87 @@ const showInfo = () => {
     life: 3000,
   });
 };
+
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
 </script>
 
 <template>
-  <div
-    class="card fadeinright animation-duration-500 surface-100"
-    v-for="(task, index) in taskStore.tasks"
-    :key="task.id"
-  >
-    <Card>
-      <div class="card flex justify-content-center"></div>
-      <template #content
-        ><p class="m-0">
-          {{ task.title }}{{ task.is_complete }}{{ taskCheckboxes[index] }}
-        </p></template
+  <div class="dark:bg-zinc-900 dark:text-slate-200">
+    <div
+      class="flex flex-wrap justify-between dark:p-o sm:justify-center text-center content-center font-mono dark:bg-zinc-900 dark:text-slate-200"
+    >
+      <div
+        class="w-4/6 mx-5 my-10 bg-white rounded-lg shadow-md p-1 fadeinright animation-duration-500 dark:p-o dark:bg-zinc-900 dark:text-slate-200"
+        v-for="(task, index) in taskStore.tasks"
+        :key="task.id"
       >
-      <template #footer>
-        <Divider type="solid" />
-        <div class="flex justify-content-between gap-8">
-          <div class="col-6">
-            <Checkbox
-              v-model="taskCheckboxes[index]"
-              :binary="true"
-              @change="updateStatus(index, task.id)"
-            />
-          </div>
-          <div class="col-6">
-            <div class="grid">
-              <Toast />
-              <div class="col-2">
-                <i
-                  severity="success"
-                  class="pi pi-file-edit cursor-pointer"
-                  v-tooltip.top="'Edit'"
-                  style="font-size: 0, 5rem"
-                  @click="
-                    updateCurrentTask(task.id, task.title);
-                    showSuccess();
-                  "
-                ></i>
+        <div
+          class="flex flex-wrap justify-between dark:p-o dark:bg-zinc-900 sm:justify-center md text-center font-mono dark:bg-zinc-700"
+        >
+          <img
+            class="w-32 h-32 rounded-full mx-6 m-2"
+            :src="`https://picsum.photos/id/${parseInt(
+              task.id.toString().slice(0, 3)
+            )}/200/300`"
+            alt="Task random picture"
+          />
+          <div class="justify-start justify-items-start">
+            <h2 class="text-2xl font-semibold mt-1 w-auto dark:text-slate-200">
+              {{ task.title }}
+            </h2>
+            <p class="text-gray-600 mt-1 w-auto dark:text-slate-200">
+              created : {{ formatDate(task.inserted_at) }}
+            </p>
+
+            <div class="mt-2">
+              <h3 class="text-xl font-semibold">Notes</h3>
+              <p class="text-gray-600 mt-2"></p>
+            </div>
+            <div class="flex justify-content-between gap-8">
+              <div class="mt-2">
+                <Checkbox
+                  v-model="taskCheckboxes[index]"
+                  :binary="true"
+                  v-tooltip.top="'Completed'"
+                  @change="updateStatus(index, task.id)"
+                />
               </div>
 
-              <div class="col-2">
-                <i
-                  class="pi pi-trash cursor-pointer"
-                  v-tooltip.top="'Delete'"
-                  style="font-size: 0, 5rem"
-                  @click="
-                    deleteCurrentTask(task.id);
-                    showInfo();
-                  "
-                ></i>
+              <div class="flex">
+                <Toast />
+                <div class="mt-2">
+                  <i
+                    severity="success"
+                    class="pi pi-file-edit cursor-pointer"
+                    v-tooltip.top="'Edit'"
+                    style="font-size: 0, 5rem"
+                    @click="
+                      updateCurrentTask(task.id, task.title);
+                      showSuccess();
+                    "
+                  ></i>
+                </div>
+
+                <div class="col-2">
+                  <i
+                    class="pi pi-trash cursor-pointer"
+                    v-tooltip.top="'Delete'"
+                    style="font-size: 0, 5rem"
+                    @click="
+                      deleteCurrentTask(task.id);
+                      showInfo();
+                    "
+                  ></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </template>
-    </Card>
+      </div>
+    </div>
   </div>
-  <!--
-        <ul>
-    <li
-      class="fadeinright animation-duration-500"
-      v-for="task in taskStore.tasks"
-      :key="task.id"
-    >
-      {{ task.title }}{{ task.is_complete }}
-      <span><button @click="deleteCurrentTask(task.id)">delete</button></span>
-      <button @click="updateCurrentTask(task.id, task.title)">edit</button>
-    </li>
-  </ul>-->
 </template>
 <style scoped></style>

@@ -3,11 +3,7 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <RouterView class="surface-200"> </RouterView>
+  <div class="dark:bg-zinc-900"><RouterView class="h-screen"></RouterView></div>
 </template>
 
-<style>
-body {
-  font-family: var(--font-family);
-}
-</style>
+<style></style>

@@ -1,5 +1,5 @@
 import './assets/main.css'
-
+import './style.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -8,6 +8,7 @@ import router from './router'
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import Tooltip from "primevue/tooltip";
+import Tailwind from "primevue/passthrough/tailwind";
 
 
 
@@ -25,5 +26,5 @@ app.use(createPinia())
 app.use(router)
 app.use(PrimeVue)
 app.use(ToastService)
-
+app.use(PrimeVue, { unstyled: true, pt: Tailwind })
 app.mount('#app')
