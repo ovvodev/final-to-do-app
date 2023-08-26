@@ -178,7 +178,6 @@ const formatDate = (dateString) => {
                 @change="updateStatus(index, task.id)"
               />
             </div>
-
             <div class="flex">
               <Toast />
               <div class="mt-2">
