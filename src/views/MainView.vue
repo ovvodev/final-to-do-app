@@ -47,14 +47,14 @@ const showSuccess = () => {
 };
 </script>
 <template>
-  <div class="dark:bg-zinc-900 dark:text-slate-200">
+  <div class="dark:bg-zinc-900 min-h-full dark:text-slate-200">
     <NavBar></NavBar>
     <Toast />
     <div
-      class="card flex justify-content-center add-button dark:text-slate-200 dark:bg-zinc-900"
+      class="flex justify-content-center add-button dark:text-slate-200 dark:bg-zinc-900"
     >
       <Dialog
-        class="dark:bg-zync-900"
+        class="dark:bg-slate-900 w-64"
         v-model:visible="visible"
         :modal="true"
         :draggable="false"
@@ -68,32 +68,33 @@ const showSuccess = () => {
           :style="{ width: '90%' }"
           class="dark:bg-zync-900"
         />
-
-        <button
-          class="dark:text-slate-200"
-          label="cancel"
-          icon="pi pi-times"
-          @click="
-            visible = false;
-            cancel();
-          "
-          text
-        >
-          Cancel
-        </button>
-        <button
-          class="dark:text-slate-200"
-          label="Save"
-          icon="pi pi-check"
-          @click="
-            visible = false;
-            createNewTask();
-            showSuccess();
-          "
-          autofocus
-        >
-          Save
-        </button>
+        <div class="flex flex-wrap justify-start m-2">
+          <button
+            class="text-white dark:text-slate-200 bg-red-700 p-2 m-2"
+            label="cancel"
+            icon="pi pi-times"
+            @click="
+              visible = false;
+              cancel();
+            "
+            text
+          >
+            Cancel
+          </button>
+          <button
+            class="text-white dark:text-slate-200 bg-cyan-700 p-2 m-2"
+            label="Save"
+            icon="pi pi-check"
+            @click="
+              visible = false;
+              createNewTask();
+              showSuccess();
+            "
+            autofocus
+          >
+            Save
+          </button>
+        </div>
       </Dialog>
       <div
         class="flex flex-col space-y-4 p-4 dark:text-slate-200 dark:bg-zinc-900"
