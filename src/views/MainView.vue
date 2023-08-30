@@ -47,7 +47,7 @@ const showSuccess = () => {
 };
 </script>
 <template>
-  <div class="dark:bg-zinc-900 min-h-full dark:text-slate-200">
+  <div class="dark:bg-zinc-900 h-full dark:text-slate-200">
     <NavBar></NavBar>
     <Toast />
     <div
@@ -129,4 +129,8 @@ const showSuccess = () => {
     ></TasksView>
   </div>
 </template>
-<style></style>
+<style>
+.h-screen {
+  height: 100%;
+}
+</style>
