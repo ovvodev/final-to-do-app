@@ -160,7 +160,7 @@ const formatDate = (dateString) => {
           <img
             class="w-20 h-20 rounded-full mx-6 m-2 absolute -top-10 -left-20 border-solid border-2 dark:!border-red-500 border-green-400"
             :src="`https://picsum.photos/id/${parseInt(
-              task.id.toString().slice(0, 3)
+              task.id.toString().slice(1, 3)
             )}/200/300`"
             alt="Task random picture"
           />
